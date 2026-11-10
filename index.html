@@ -256,47 +256,52 @@
       pointer-events: auto;
     }
 
-    /* ANIMAÇÃO SUAVE DE DESDOBRAMENTO (UNFOLD) */
+    /* ENVELOPE-TO-SCREEN WRAPPER */
     .paper-shadow-wrapper {
       width: 95%;
-      max-width: 395px;
-      filter: drop-shadow(0 16px 28px rgba(0,0,0,0.92)) drop-shadow(0 0 10px rgba(120, 75, 20, 0.45));
+      max-width: 400px;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.95)) drop-shadow(0 0 12px rgba(120, 75, 20, 0.5));
       transform-origin: center center;
-      transform: scale(0.15) rotateX(60deg) rotate(-8deg);
       opacity: 0;
-      transition: transform 0.95s cubic-bezier(0.18, 0.89, 0.32, 1.15), opacity 0.6s ease;
+      will-change: transform, opacity;
     }
 
-    #letter-modal.open .paper-shadow-wrapper {
-      transform: scale(1) rotateX(0deg) rotate(0deg);
-      opacity: 1;
-    }
-
-    /* FOLHA ENVELHECIDA COM BORDAS RASGADAS */
+    /* FOLHA ENVELHECIDA COM BORDAS MUITO MAIS RASGADAS E DETALHADAS */
     .aged-sheet {
       position: relative;
       background: #ebd8b0;
       background-image: 
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.55) 0%, rgba(184, 142, 74, 0.45) 82%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.55) 0%, rgba(184, 142, 74, 0.42) 80%),
+        radial-gradient(ellipse at top left, rgba(92, 53, 16, 0.28) 0%, transparent 45%),
+        radial-gradient(ellipse at bottom right, rgba(92, 53, 16, 0.35) 0%, transparent 50%),
         repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.02) 3px);
       box-shadow: 
-        inset 0 0 50px rgba(115, 75, 25, 0.65),
-        inset 0 0 14px rgba(70, 40, 10, 0.8);
-      max-height: 84vh;
+        inset 0 0 55px rgba(115, 75, 25, 0.7),
+        inset 0 0 16px rgba(60, 32, 8, 0.85);
+      max-height: 85vh;
       overflow-y: auto;
       padding: 34px 26px;
       
-      /* Efeito de borda rasgada e irregular */
+      /* Borda detalhada com rasgos profundos, lascas e micro-irregularidades */
       clip-path: polygon(
-        0% 3px, 4% 1px, 9% 4px, 16% 1px, 24% 3px, 32% 0px, 40% 4px, 48% 1px, 
-        57% 3px, 66% 0px, 74% 4px, 83% 1px, 91% 3px, 97% 1px, 100% 4px,
-        99% 12%, 100% 22%, 98.5% 33%, 100% 44%, 99% 55%, 100% 67%, 98.5% 78%, 100% 89%, 99% 98%,
-        96% 100%, 88% 98.5%, 80% 100%, 72% 98%, 63% 100%, 54% 98.5%, 45% 100%, 36% 98%, 27% 100%, 18% 98.5%, 9% 100%, 2% 98%, 0% 97%,
-        1% 88%, 0% 77%, 1.5% 66%, 0% 55%, 1% 44%, 0% 33%, 1.5% 22%, 0% 11%
+        0% 4px, 2% 1px, 5% 5px, 8% 2px, 11% 6px, 14% 1px, 18% 4px, 22% 0px, 
+        26% 5px, 30% 2px, 34% 6px, 38% 1px, 42% 4px, 47% 0px, 51% 5px, 55% 2px, 
+        59% 6px, 63% 1px, 68% 4px, 72% 0px, 77% 5px, 81% 2px, 85% 7px, 89% 1px, 
+        93% 5px, 96% 2px, 98% 8px, 100% 3px,
+        
+        99% 7%, 100% 12%, 98% 16%, 99.5% 21%, 97.5% 26%, 100% 31%, 98% 36%, 99.5% 42%,
+        97% 48%, 100% 54%, 98.5% 60%, 100% 66%, 97% 72%, 99.5% 78%, 98% 84%, 100% 90%, 98.5% 95%, 100% 98%,
+        
+        97% 99%, 94% 96%, 91% 100%, 87% 97%, 83% 100%, 79% 96%, 75% 100%, 70% 97%,
+        66% 100%, 61% 96%, 57% 100%, 52% 97%, 48% 100%, 43% 96%, 39% 100%, 34% 97%,
+        30% 100%, 25% 96%, 21% 100%, 16% 97%, 12% 100%, 8% 96%, 4% 100%, 1% 97%,
+        
+        1.5% 92%, 0% 86%, 2.5% 80%, 0.5% 74%, 2% 68%, 0% 62%, 2.5% 56%, 0.5% 50%,
+        2% 44%, 0% 38%, 2.5% 32%, 0.5% 26%, 2% 20%, 0% 14%, 2.5% 8%
       );
     }
 
-    /* Vincos suaves da carta desdobrada */
+    /* Linhas sutis de dobra de carta dobrada em 3 partes */
     .aged-sheet::before {
       content: '';
       position: absolute;
@@ -304,7 +309,7 @@
       top: 33%;
       width: 100%;
       height: 1px;
-      background: rgba(115, 75, 25, 0.24);
+      background: rgba(115, 75, 25, 0.25);
       box-shadow: 0 1px 2px rgba(255, 255, 255, 0.25);
       pointer-events: none;
     }
@@ -316,7 +321,7 @@
       top: 66%;
       width: 100%;
       height: 1px;
-      background: rgba(115, 75, 25, 0.24);
+      background: rgba(115, 75, 25, 0.25);
       box-shadow: 0 1px 2px rgba(255, 255, 255, 0.25);
       pointer-events: none;
     }
@@ -417,7 +422,7 @@
 
   <!-- Folha Envelhecida com Bordas Rasgadas -->
   <div id="letter-modal" onclick="closeLetter()">
-    <div class="paper-shadow-wrapper" onclick="event.stopPropagation()">
+    <div class="paper-shadow-wrapper" id="paper-wrapper" onclick="event.stopPropagation()">
       <div class="aged-sheet">
         <svg class="hufflepuff-crest" viewBox="0 0 24 24">
           <path d="M12,2L4,5V11C4,16.5 7.4,21.7 12,23C16.6,21.7 20,16.5 20,11V5L12,2M12,6A3,3 0 0,1 15,9C15,10.2 14.3,11.2 13.3,11.7L15,16H13.2L12,12.7L10.8,16H9L10.7,11.7C9.7,11.2 9,10.2 9,9A3,3 0 0,1 12,6Z"/>
@@ -521,23 +526,58 @@
 
     let letterOpened = false;
 
+    // Abertura com física saindo direto do envelope da coruja
     function openLetter() {
       if (letterOpened) return;
       letterOpened = true;
 
+      const heldLetter = document.querySelector('.held-letter');
+      const rect = heldLetter.getBoundingClientRect();
+      const deltaX = (rect.left + rect.width / 2) - (window.innerWidth / 2);
+      const deltaY = (rect.top + rect.height / 2) - (window.innerHeight / 2);
+
+      const wrapper = document.getElementById('paper-wrapper');
       const modal = document.getElementById('letter-modal');
+
+      // Posiciona a folha minúscula exatamente em cima do envelope
+      wrapper.style.transition = 'none';
+      wrapper.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.12) rotate(-16deg)`;
+      wrapper.style.opacity = '0.3';
+
       modal.classList.add('open');
       document.getElementById('prompt-msg').style.opacity = '0';
+
+      // Força a renderização do ponto de partida
+      wrapper.offsetHeight;
+
+      // Voa e desdobra suavemente até o centro da tela
+      requestAnimationFrame(() => {
+        wrapper.style.transition = 'transform 1.05s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease';
+        wrapper.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)';
+        wrapper.style.opacity = '1';
+      });
     }
 
+    // Fechamento voltando para dentro do envelope
     function closeLetter() {
+      const heldLetter = document.querySelector('.held-letter');
+      const rect = heldLetter.getBoundingClientRect();
+      const deltaX = (rect.left + rect.width / 2) - (window.innerWidth / 2);
+      const deltaY = (rect.top + rect.height / 2) - (window.innerHeight / 2);
+
+      const wrapper = document.getElementById('paper-wrapper');
       const modal = document.getElementById('letter-modal');
-      modal.classList.remove('open');
-      
+
+      // Se encolhe e retorna diretamente para o envelope
+      wrapper.style.transition = 'transform 0.85s cubic-bezier(0.7, 0, 0.84, 0), opacity 0.6s ease';
+      wrapper.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.12) rotate(-16deg)`;
+      wrapper.style.opacity = '0';
+
       setTimeout(() => {
+        modal.classList.remove('open');
         document.getElementById('prompt-msg').style.opacity = '1';
         letterOpened = false;
-      }, 600);
+      }, 850);
     }
   </script>
 </body>
