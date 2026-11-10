@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Uma Carta de Hogwarts para Ana</title>
+  
+  <!-- Fontes do Google: Mágica e Cursiva -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Dancing+Script:wght@600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Cinzel Decorative', cursive, serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    /* Estrelas cintilantes */
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: transparent;
+      box-shadow: 
+        20px 30px #ffffff, 60px 80px #ffffff, 120px 40px #ffffff, 
+        200px 150px #ffffff, 280px 70px #ffffff, 330px 220px #ffffff,
+        90px 290px #ffffff, 180px 380px #ffffff, 250px 450px #ffffff,
+        40px 520px #ffffff, 300px 600px #ffffff, 150px 700px #ffffff;
+      opacity: 0.6;
+    }
+
+    /* Tela de Início (Garante o início do som no celular) */
+    #start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(8, 10, 15, 0.95);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      cursor: pointer;
+      transition: opacity 1s ease;
+    }
+
+    #start-screen h2 {
+      color: #e5b23e;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px rgba(229, 178, 62, 0.5);
+    }
+
+    #start-screen p {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.3rem;
+      color: #ddd;
+    }
+
+    /* Galho na árvore */
+    .branch {
+      position: absolute;
+      bottom: 25%;
+      right: 0;
+      width: 200px;
+      height: 20px;
+      background: #3b2210;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      box-shadow: inset -5px -3px 0 #211207;
+      display: none;
+      z-index: 10;
+    }
+
+    .branch::after {
+      content: '';
+      position: absolute;
+      left: 30px;
+      bottom: -15px;
+      width: 60px;
+      height: 12px;
+      background: #3b2210;
+      transform: rotate(20deg);
+      border-radius: 6px;
+    }
+
+    /* Coruja */
+    .owl-container {
+      position: absolute;
+      width: 110px;
+      height: 120px;
+      top: -150px;
+      left: -120px;
+      z-index: 20;
+      display: none;
+    }
+
+    /* Animação do vôo e pouso */
+    @keyframes flyAndLand {
+      0% {
+        top: 5%;
+        left: -120px;
+        transform: scale(0.6) rotate(15deg);
+      }
+      40% {
+        top: 30%;
+        left: 50%;
+        transform: scale(0.9) rotate(-5deg);
+      }
+      75% {
+        top: 45%;
+        left: 40%;
+        transform: scale(1) rotate(5deg);
+      }
+      100% {
+        top: calc(75% - 90px);
+        left: calc(100% - 150px);
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    .flying {
+      display: block;
+      animation: flyAndLand 5s ease-out forwards;
+    }
+
+    /* Asas batendo */
+    @keyframes flapLeft {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-35deg); }
+    }
+    @keyframes flapRight {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(35deg); }
+    }
+
+    .wing-l {
+      animation: flapLeft 0.35s infinite alternate ease-in-out;
+      transform-origin: top right;
+    }
+    .wing-r {
+      animation: flapRight 0.35s infinite alternate ease-in-out;
+      transform-origin: top left;
+    }
+
+    /* Cartinha carregada pela coruja */
+    .held-letter {
+      position: absolute;
+      bottom: -15px;
+      left: 32px;
+      width: 45px;
+      height: 28px;
+      background: #ebd5a0;
+      border: 1px solid #7a6336;
+      border-radius: 2px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: pulseLetter 1.2s infinite alternate ease-in-out;
+    }
+
+    .held-letter::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 22.5px solid transparent;
+      border-right: 22.5px solid transparent;
+      border-top: 15px solid #d4b87b;
+    }
+
+    .seal {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #8b0000;
+      border-radius: 50%;
+      top: 10px;
+      z-index: 5;
+    }
+
+    @keyframes pulseLetter {
+      0% { transform: scale(1); filter: drop-shadow(0 0 2px #ecbe56); }
+      100% { transform: scale(1.15); filter: drop-shadow(0 0 10px #f0c330); }
+    }
+
+    /* Mensagem "Abra sua carta" */
+    #prompt-msg {
+      position: absolute;
+      bottom: 12%;
+      width: 100%;
+      text-align: center;
+      font-size: 1.3rem;
+      color: #f7d070;
+      text-shadow: 0 0 10px #d89f2a, 0 0 20px #000;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    /* Modal com a Carta aberta em papel envelhecido */
+    #letter-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 200;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+
+    #letter-modal.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .parchment {
+      position: relative;
+      background: #f4e4bc;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, rgba(184, 142, 74, 0.4) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 3px);
+      width: 100%;
+      max-width: 420px;
+      max-height: 85vh;
+      overflow-y: auto;
+      border-radius: 6px;
+      padding: 30px 25px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.9), inset 0 0 50px rgba(133, 94, 38, 0.45);
+      border: 1px solid #c2a66b;
+      transform: scale(0.7);
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #letter-modal.open .parchment {
+      transform: scale(1);
+    }
+
+    .hufflepuff-crest {
+      display: block;
+      margin: 0 auto 15px auto;
+      width: 45px;
+      height: 45px;
+      fill: #e5b23e;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+    }
+
+    .parchment p {
+      font-family: 'Great Vibes', 'Dancing Script', cursive;
+      font-size: 1.55rem;
+      line-height: 1.6;
+      color: #2b1d0c;
+      text-align: left;
+      margin-bottom: 12px;
+      text-shadow: 0.2px 0.2px 0px rgba(0,0,0,0.2);
+    }
+
+    .parchment .signature {
+      text-align: right;
+      margin-top: 25px;
+      font-size: 1.65rem;
+    }
+
+    .parchment .ps {
+      margin-top: 20px;
+      font-size: 1.35rem;
+      font-style: italic;
+      color: #4a3419;
+      border-top: 1px dashed rgba(74, 52, 25, 0.3);
+      padding-top: 10px;
+    }
+
+    .close-btn {
+      display: block;
+      margin: 20px auto 0 auto;
+      padding: 6px 18px;
+      font-family: 'Cinzel Decorative', serif;
+      background: #2b1d0c;
+      color: #f4e4bc;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars"></div>
+
+  <!-- Tela inicial para destravar o áudio no celular -->
+  <div id="start-screen" onclick="startExperience()">
+    <h2>✉️ Mensagem Especial</h2>
+    <p>Toque na tela para abrir o portal de Hogwarts...</p>
+  </div>
+
+  <!-- Galho -->
+  <div class="branch" id="branch"></div>
+
+  <!-- Coruja -->
+  <div class="owl-container" id="owl">
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <!-- Asa Esquerda -->
+      <path class="wing-l" d="M 30,40 Q 5,20 10,60 Q 25,65 35,50 Z" fill="#b0aba4"/>
+      <!-- Asa Direita -->
+      <path class="wing-r" d="M 70,40 Q 95,20 90,60 Q 75,65 65,50 Z" fill="#b0aba4"/>
+      <!-- Corpo da Coruja (Edwiges) -->
+      <ellipse cx="50" cy="50" rx="22" ry="28" fill="#eae8e5" stroke="#ccc5ba" stroke-width="1.5"/>
+      <!-- Manchinhas das penas -->
+      <path d="M 45,45 Q 50,42 55,45" stroke="#787268" stroke-width="1.5" fill="none"/>
+      <path d="M 42,55 Q 50,52 58,55" stroke="#787268" stroke-width="1.5" fill="none"/>
+      <path d="M 46,65 Q 50,62 54,65" stroke="#787268" stroke-width="1.5" fill="none"/>
+      <!-- Olhos e Bico -->
+      <circle cx="42" cy="35" r="7.5" fill="#f5c71a"/>
+      <circle cx="58" cy="35" r="7.5" fill="#f5c71a"/>
+      <circle cx="42" cy="35" r="4" fill="#0f0e0c"/>
+      <circle cx="58" cy="35" r="4" fill="#0f0e0c"/>
+      <polygon points="50,38 46,45 54,45" fill="#40392f"/>
+    </svg>
+
+    <!-- Cartinha que a coruja segura -->
+    <div class="held-letter" onclick="openLetter()">
+      <div class="seal"></div>
+    </div>
+  </div>
+
+  <!-- Aviso "Abra sua carta" -->
+  <div id="prompt-msg">✨ Abra sua carta ✨</div>
+
+  <!-- Carta / Pergaminho Aberto -->
+  <div id="letter-modal" onclick="closeLetter(event)">
+    <div class="parchment" onclick="event.stopPropagation()">
+      <!-- Símbolo / Brasão Lufa-Lufa estilizado -->
+      <svg class="hufflepuff-crest" viewBox="0 0 24 24">
+        <path d="M12,2L4,5V11C4,16.5 7.4,21.7 12,23C16.6,21.7 20,16.5 20,11V5L12,2M12,6A3,3 0 0,1 15,9C15,10.2 14.3,11.2 13.3,11.7L15,16H13.2L12,12.7L10.8,16H9L10.7,11.7C9.7,11.2 9,10.2 9,9A3,3 0 0,1 12,6Z"/>
+      </svg>
+      
+      <p>Feliz Natal Ana,</p>
+      <p>Desejos de felicidade e paz genuínos deste Lufano que te escreve.</p>
+      <p>Creio que deva estar tão ansiosa quanto eu pela estreia da série. Depois comentamos sobre hehehe.</p>
+      
+      <p class="signature">
+        Beijos. Boas festas,<br>
+        <strong>Professor Darlan</strong>
+      </p>
+
+      <p class="ps">
+        p.s. Sem spoilers caso veja antes de mim.
+      </p>
+
+      <button class="close-btn" onclick="closeLetter()">Guardar Carta</button>
+    </div>
+  </div>
+
+  <script>
+    // Sintetizador de Áudio (Toca Hedwig's Theme com som de Celesta sem depender de arquivos externos)
+    let audioCtx = null;
+    let isPlaying = false;
+
+    function playNote(freq, startTime, duration) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      // Som suave tipo carrilhão / celesta
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      // Curva suave de volume
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.2, startTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    }
+
+    // Notas e tempos de Hedwig's Theme
+    const notes = [
+      { f: 493.88, d: 0.5 }, // B4
+      { f: 659.25, d: 0.75 },// E5
+      { f: 783.99, d: 0.35 },// G5
+      { f: 739.99, d: 0.4 }, // F#5
+      { f: 659.25, d: 0.75 },// E5
+      { f: 987.77, d: 0.5 }, // B5
+      { f: 880.00, d: 1.1 }, // A5
+      { f: 739.99, d: 1.1 }, // F#5
+      { f: 659.25, d: 0.75 },// E5
+      { f: 783.99, d: 0.35 },// G5
+      { f: 739.99, d: 0.4 }, // F#5
+      { f: 622.25, d: 0.75 },// D#5
+      { f: 698.46, d: 0.5 }, // F5
+      { f: 493.88, d: 1.2 }  // B4
+    ];
+
+    function startHedwigsTheme() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      isPlaying = true;
+
+      function loopMelody() {
+        if (!isPlaying) return;
+        let now = audioCtx.currentTime + 0.1;
+        let totalDuration = 0;
+
+        notes.forEach((note) => {
+          playNote(note.f, now + totalDuration, note.d);
+          totalDuration += note.d + 0.15;
+        });
+
+        setTimeout(() => {
+          if (isPlaying) loopMelody();
+        }, (totalDuration + 0.5) * 1000);
+      }
+
+      loopMelody();
+    }
+
+    // Início da experiência pelo usuário
+    function startExperience() {
+      // Esconde tela de entrada
+      const startScreen = document.getElementById('start-screen');
+      startScreen.style.opacity = '0';
+      setTimeout(() => startScreen.style.display = 'none', 1000);
+
+      // Inicia música tema
+      startHedwigsTheme();
+
+      // Mostra galho e inicia vôo da coruja
+      document.getElementById('branch').style.display = 'block';
+      const owl = document.getElementById('owl');
+      owl.classList.add('flying');
+
+      // Após a coruja pousar (5 segundos), exibe o texto "Abra sua carta"
+      setTimeout(() => {
+        // Para de bater as asas
+        document.querySelector('.wing-l').style.animation = 'none';
+        document.querySelector('.wing-r').style.animation = 'none';
+        
+        // Exibe o aviso
+        document.getElementById('prompt-msg').style.opacity = '1';
+      }, 5000);
+    }
+
+    // Abrir carta
+    function openLetter() {
+      const modal = document.getElementById('letter-modal');
+      modal.classList.add('open');
+      document.getElementById('prompt-msg').style.display = 'none';
+    }
+
+    // Fechar carta
+    function closeLetter(e) {
+      const modal = document.getElementById('letter-modal');
+      modal.classList.remove('open');
+    }
+  </script>
+</body>
+</html>
