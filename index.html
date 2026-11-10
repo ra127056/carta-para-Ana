@@ -19,7 +19,10 @@
     }
 
     body {
-      background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+      /* Fundo escuro mágico de Hogwarts com brilho dourado sutil no horizonte */
+      background: 
+        radial-gradient(circle at 22% 18%, rgba(212, 175, 55, 0.16) 0%, transparent 35%),
+        radial-gradient(ellipse at 50% 90%, #1a1528 0%, #0b0c14 55%, #050508 100%);
       height: 100vh;
       width: 100vw;
       overflow: hidden;
@@ -28,9 +31,66 @@
       justify-content: center;
       align-items: center;
       color: #fff;
+      position: relative;
     }
 
-    /* Céu estrelado */
+    /* Moldura Dourada Temática nos Cantos da Tela */
+    .gold-frame {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.08);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .gold-frame::before, .gold-frame::after {
+      content: '✦';
+      position: absolute;
+      color: #d4af37;
+      font-size: 1.1rem;
+      text-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
+    }
+    .gold-frame::before { top: -10px; left: 50%; transform: translateX(-50%); background: #07070c; padding: 0 8px; }
+    .gold-frame::after { bottom: -10px; left: 50%; transform: translateX(-50%); background: #07070c; padding: 0 8px; }
+
+    /* Cantoneiras Douradas */
+    .corner {
+      position: fixed;
+      width: 28px;
+      height: 28px;
+      border-color: #d4af37;
+      border-style: solid;
+      pointer-events: none;
+      z-index: 6;
+      opacity: 0.75;
+      filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.5));
+    }
+    .corner.tl { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+    .corner.tr { top: 6px; right: 6px; border-width: 2px 2px 0 0; }
+    .corner.bl { bottom: 6px; left: 6px; border-width: 0 0 2px 2px; }
+    .corner.br { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+
+    /* Lua Dourada */
+    .moon {
+      position: absolute;
+      top: 9%;
+      left: 14%;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fffdf2 0%, #f3d27a 55%, #c79a2b 100%);
+      box-shadow: 
+        0 0 25px rgba(243, 210, 122, 0.5),
+        0 0 60px rgba(212, 175, 55, 0.3);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Estrelas e Partículas de Ouro */
     .stars {
       position: absolute;
       top: 0;
@@ -40,12 +100,40 @@
       pointer-events: none;
       background: transparent;
       box-shadow: 
-        15px 25px #ffffff, 60px 80px #ffffff, 110px 35px #ffffff, 
-        210px 140px #ffffff, 270px 60px #ffffff, 320px 210px #ffffff,
-        80px 280px #ffffff, 170px 370px #ffffff, 240px 440px #ffffff,
-        35px 510px #ffffff, 290px 590px #ffffff, 140px 690px #ffffff,
-        340px 110px #fff7d6, 75px 630px #fff7d6;
-      opacity: 0.7;
+        25px 45px 1px #ffd700, 75px 95px #ffffff, 130px 40px 1px #f5d167, 
+        210px 120px #ffffff, 280px 60px 1px #ffd700, 330px 190px #ffffff,
+        90px 240px 1px #f5d167, 180px 310px #ffffff, 260px 380px 1px #ffd700,
+        40px 430px #ffffff, 310px 490px 1px #f5d167, 150px 520px #ffffff,
+        340px 110px 1px #ffd700, 60px 360px #fff7d6, 200px 65px 1px #ffd700;
+      opacity: 0.85;
+      animation: twinkle 4s infinite alternate ease-in-out;
+      z-index: 1;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.55; }
+      100% { opacity: 0.95; }
+    }
+
+    /* Castelo de Hogwarts ao Fundo com Janelas Douradas */
+    .hogwarts-bg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 45vh;
+      pointer-events: none;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .hogwarts-svg {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      display: block;
+      filter: drop-shadow(0 -8px 20px rgba(212, 175, 55, 0.15));
     }
 
     /* Tela de Início */
@@ -55,7 +143,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(8, 10, 15, 0.96);
+      background: radial-gradient(ellipse at center, rgba(16, 14, 26, 0.96) 0%, rgba(5, 5, 9, 0.99) 100%);
       z-index: 100;
       display: flex;
       flex-direction: column;
@@ -67,30 +155,40 @@
       transition: opacity 0.8s ease;
     }
 
+    .crest-start {
+      width: 65px;
+      height: 65px;
+      fill: #d4af37;
+      margin-bottom: 18px;
+      filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+    }
+
     #start-screen h2 {
-      color: #e5b23e;
+      color: #f0c85a;
       font-size: 1.6rem;
       margin-bottom: 15px;
-      text-shadow: 0 0 10px rgba(229, 178, 62, 0.6);
+      text-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+      letter-spacing: 1px;
     }
 
     #start-screen p {
       font-family: 'Dancing Script', cursive;
-      font-size: 1.45rem;
-      color: #e0e0e0;
+      font-size: 1.5rem;
+      color: #e8dec8;
     }
 
-    /* Galho */
+    /* Galho com leve reflexo dourado da lua */
     .branch {
       position: absolute;
       bottom: 22%;
       right: 0;
       width: 250px;
       height: 26px;
-      background: #361e0d;
+      background: linear-gradient(to bottom, #593818 0%, #301a0a 40%, #170b03 100%);
+      border-top: 1px solid rgba(212, 175, 55, 0.4);
       border-top-left-radius: 14px;
       border-bottom-left-radius: 14px;
-      box-shadow: inset -5px -4px 0 #1a0d05;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.8);
       display: none;
       z-index: 10;
     }
@@ -102,7 +200,7 @@
       bottom: -18px;
       width: 75px;
       height: 15px;
-      background: #361e0d;
+      background: #2b1709;
       transform: rotate(24deg);
       border-radius: 8px;
     }
@@ -116,6 +214,7 @@
       left: -220px;
       z-index: 20;
       display: none;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.8));
     }
 
     @keyframes flyAndLand {
@@ -182,7 +281,7 @@
       width: 72px;
       height: 46px;
       background: #ebd5a0;
-      border: 1.5px solid #7a6336;
+      border: 1.5px solid #b58d3d;
       border-radius: 3px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.8);
       position: relative;
@@ -205,7 +304,8 @@
       position: absolute;
       width: 15px;
       height: 15px;
-      background: #8b0000;
+      background: radial-gradient(circle, #b31b1b 0%, #6e0a0a 100%);
+      border: 1px solid #d4af37;
       border-radius: 50%;
       top: 15px;
       left: 27px;
@@ -213,8 +313,8 @@
     }
 
     @keyframes pulseLetter {
-      0% { transform: scale(1); filter: drop-shadow(0 0 3px #ecbe56); }
-      100% { transform: scale(1.15); filter: drop-shadow(0 0 14px #f0c330); }
+      0% { transform: scale(1); filter: drop-shadow(0 0 4px #d4af37); }
+      100% { transform: scale(1.15); filter: drop-shadow(0 0 16px #ffd700); }
     }
 
     /* Mensagem Abra sua carta */
@@ -224,8 +324,8 @@
       width: 100%;
       text-align: center;
       font-size: 1.45rem;
-      color: #f7d070;
-      text-shadow: 0 0 10px #d89f2a, 0 0 20px #000;
+      color: #ffd86b;
+      text-shadow: 0 0 12px #d4af37, 0 2px 10px #000;
       opacity: 0;
       transition: opacity 1s ease;
       z-index: 30;
@@ -239,7 +339,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.88);
+      background: rgba(4, 4, 8, 0.88);
       z-index: 200;
       display: flex;
       justify-content: center;
@@ -260,13 +360,13 @@
     .paper-shadow-wrapper {
       width: 95%;
       max-width: 400px;
-      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.95)) drop-shadow(0 0 12px rgba(120, 75, 20, 0.5));
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.95)) drop-shadow(0 0 15px rgba(212, 175, 55, 0.35));
       transform-origin: center center;
       opacity: 0;
       will-change: transform, opacity;
     }
 
-    /* FOLHA ENVELHECIDA COM BORDAS MUITO MAIS RASGADAS E DETALHADAS */
+    /* FOLHA ENVELHECIDA COM BORDAS RASGADAS E DETALHADAS */
     .aged-sheet {
       position: relative;
       background: #ebd8b0;
@@ -282,7 +382,6 @@
       overflow-y: auto;
       padding: 34px 26px;
       
-      /* Borda detalhada com rasgos profundos, lascas e micro-irregularidades */
       clip-path: polygon(
         0% 4px, 2% 1px, 5% 5px, 8% 2px, 11% 6px, 14% 1px, 18% 4px, 22% 0px, 
         26% 5px, 30% 2px, 34% 6px, 38% 1px, 42% 4px, 47% 0px, 51% 5px, 55% 2px, 
@@ -301,7 +400,7 @@
       );
     }
 
-    /* Linhas sutis de dobra de carta dobrada em 3 partes */
+    /* Linhas sutis de dobra de carta */
     .aged-sheet::before {
       content: '';
       position: absolute;
@@ -329,10 +428,10 @@
     .hufflepuff-crest {
       display: block;
       margin: 0 auto 16px auto;
-      width: 50px;
-      height: 50px;
-      fill: #c98e20;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+      width: 52px;
+      height: 52px;
+      fill: #b8860b;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35));
     }
 
     .aged-sheet p {
@@ -366,23 +465,67 @@
       padding: 9px 24px;
       font-family: 'Cinzel Decorative', serif;
       background: #2b1d0c;
-      color: #ebd8b0;
-      border: 1px solid #755628;
+      color: #f0c85a;
+      border: 1px solid #d4af37;
       border-radius: 4px;
       font-size: 0.85rem;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
   </style>
 </head>
 <body>
 
+  <!-- Moldura e Cantoneiras Douradas -->
+  <div class="gold-frame"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Lua Dourada e Estrelas -->
+  <div class="moon"></div>
   <div class="stars"></div>
+
+  <!-- Silhueta do Castelo de Hogwarts com luzes douradas -->
+  <div class="hogwarts-bg">
+    <svg class="hogwarts-svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMax slice">
+      <!-- Montanhas escuras ao fundo -->
+      <path d="M0,220 L0,170 Q60,140 120,165 T260,150 T400,175 L400,220 Z" fill="#080811"/>
+      
+      <!-- Silhueta Principal do Castelo de Hogwarts -->
+      <path d="M0,220 L0,185 L25,180 L25,140 L35,110 L45,140 L45,175 L65,175 L65,120 L80,70 L95,120 L95,160 L115,160 L115,130 L135,105 L155,130 L155,155 L170,155 L170,95 L180,95 L180,60 L195,15 L210,60 L220,60 L220,95 L230,95 L230,150 L250,150 L250,115 L262,75 L274,115 L274,165 L295,165 L295,135 L305,105 L315,135 L315,180 L345,180 L345,150 L355,125 L365,150 L365,185 L400,190 L400,220 Z" fill="#040407" stroke="rgba(212, 175, 55, 0.2)" stroke-width="0.6"/>
+      
+      <!-- Janelas Acesas em Dourado -->
+      <g fill="#f5c71a" opacity="0.85">
+        <rect x="78" y="105" width="3" height="6" rx="1.5"/>
+        <rect x="78" y="120" width="3" height="6" rx="1.5"/>
+        <rect x="192" y="55" width="4" height="8" rx="2"/>
+        <rect x="188" y="72" width="3" height="6" rx="1.5"/>
+        <rect x="198" y="72" width="3" height="6" rx="1.5"/>
+        <rect x="193" y="90" width="4" height="7" rx="2"/>
+        <rect x="130" y="135" width="4" height="8" rx="2"/>
+        <rect x="138" y="135" width="4" height="8" rx="2"/>
+        <rect x="122" y="135" width="4" height="8" rx="2"/>
+        <rect x="185" y="125" width="5" height="12" rx="2"/>
+        <rect x="195" y="125" width="5" height="12" rx="2"/>
+        <rect x="205" y="125" width="5" height="12" rx="2"/>
+        <rect x="260" y="105" width="3" height="6" rx="1.5"/>
+        <rect x="260" y="120" width="3" height="6" rx="1.5"/>
+        <rect x="303" y="130" width="3" height="6" rx="1.5"/>
+        <rect x="34" y="140" width="2.5" height="5" rx="1"/>
+        <rect x="353" y="150" width="3" height="5" rx="1"/>
+      </g>
+    </svg>
+  </div>
 
   <!-- Tela inicial -->
   <div id="start-screen" onclick="startExperience()">
-    <h2>✉️ Mensagem Especial</h2>
-    <p>Toque na tela para abrir o portal de Hogwarts...</p>
+    <svg class="crest-start" viewBox="0 0 24 24">
+      <path d="M12,2L4,5V11C4,16.5 7.4,21.7 12,23C16.6,21.7 20,16.5 20,11V5L12,2M12,6A3,3 0 0,1 15,9C15,10.2 14.3,11.2 13.3,11.7L15,16H13.2L12,12.7L10.8,16H9L10.7,11.7C9.7,11.2 9,10.2 9,9A3,3 0 0,1 12,6Z"/>
+    </svg>
+    <h2>Correspondência de Hogwarts</h2>
+    <p>Toque na tela para abrir o portal...</p>
   </div>
 
   <!-- Galho -->
@@ -526,7 +669,7 @@
 
     let letterOpened = false;
 
-    // Abertura com física saindo direto do envelope da coruja
+    // Abertura saindo direto do envelope da coruja
     function openLetter() {
       if (letterOpened) return;
       letterOpened = true;
@@ -539,7 +682,6 @@
       const wrapper = document.getElementById('paper-wrapper');
       const modal = document.getElementById('letter-modal');
 
-      // Posiciona a folha minúscula exatamente em cima do envelope
       wrapper.style.transition = 'none';
       wrapper.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.12) rotate(-16deg)`;
       wrapper.style.opacity = '0.3';
@@ -547,10 +689,8 @@
       modal.classList.add('open');
       document.getElementById('prompt-msg').style.opacity = '0';
 
-      // Força a renderização do ponto de partida
       wrapper.offsetHeight;
 
-      // Voa e desdobra suavemente até o centro da tela
       requestAnimationFrame(() => {
         wrapper.style.transition = 'transform 1.05s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease';
         wrapper.style.transform = 'translate(0px, 0px) scale(1) rotate(0deg)';
@@ -568,7 +708,6 @@
       const wrapper = document.getElementById('paper-wrapper');
       const modal = document.getElementById('letter-modal');
 
-      // Se encolhe e retorna diretamente para o envelope
       wrapper.style.transition = 'transform 0.85s cubic-bezier(0.7, 0, 0.84, 0), opacity 0.6s ease';
       wrapper.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.12) rotate(-16deg)`;
       wrapper.style.opacity = '0';
